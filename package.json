@@ -1,0 +1,11 @@
+{
+  "name": "reviews-api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon server/index.js"
+  },
+  "author": "Michael Doudy",
+  "license": "ISC"
+}
