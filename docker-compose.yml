@@ -1,0 +1,11 @@
+version: "3.8"
+
+services:
+  server:
+    image: node:12
+    command: sh -c "npm install && node server/index.js"
+    ports:
+      - 3000:3000
+    working_dir: /reviews-api
+    volumes:
+      - ./:/reviews-api
