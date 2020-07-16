@@ -1,6 +1,7 @@
 version: "3.8"
 
 services:
+
   server:
     image: node:12
     command: sh -c "npm install && node server/index.js"
@@ -9,3 +10,43 @@ services:
     working_dir: /reviews-api
     volumes:
       - ./:/reviews-api
+
+  postgresDB:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: secret
+      POSTGRES_DB: reviews
+
+  # adminer:
+  #   image: adminer
+  #   restart: always
+  #   ports:
+  #     - 8080:8080
+
+  cassie1:
+    image: cassandra
+    restart: always
+    environment:
+      CASSANDRA_CLUSTER_NAME: CassieCluster
+      CASSANDRA_ENDPOINT_SNITCH: GossipingPropertyFileSnitch
+      CASSANDRA_DC: datacenter1
+
+  cassie2:
+    image: cassandra
+    restart: always
+    environment:
+      CASSANDRA_SEEDS: cassie1
+      CASSANDRA_CLUSTER_NAME: CassieCluster
+      CASSANDRA_ENDPOINT_SNITCH: GossipingPropertyFileSnitch
+      CASSANDRA_DC: datacenter1
+
+  cassie3:
+    image: cassandra
+    restart: always
+    environment:
+      CASSANDRA_SEEDS: cassie1
+      CASSANDRA_CLUSTER_NAME: CassieCluster
+      CASSANDRA_ENDPOINT_SNITCH: GossipingPropertyFileSnitch
+      CASSANDRA_DC: datacenter2
