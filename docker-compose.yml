@@ -11,13 +11,17 @@ services:
     volumes:
       - ./:/reviews-api
 
-  postgresDB:
-    image: postgres
-    restart: always
-    environment:
-      POSTGRES_USER: admin
-      POSTGRES_PASSWORD: secret
-      POSTGRES_DB: reviews
+  # postgresDB:
+  #   image: postgres
+  #   restart: always
+  #   volumes:
+  #     - reviews-postgres-data:/var/lib/postgresDB
+  #   environment:
+  #     POSTGRES_USER: admin
+  #     POSTGRES_PASSWORD: secret
+  #     POSTGRES_DB: reviews
+  #   ports:
+  #     - '5432:5432'
 
   # adminer:
   #   image: adminer
@@ -32,6 +36,8 @@ services:
       CASSANDRA_CLUSTER_NAME: CassieCluster
       CASSANDRA_ENDPOINT_SNITCH: GossipingPropertyFileSnitch
       CASSANDRA_DC: datacenter1
+    ports:
+      - '9042:9042'
 
   cassie2:
     image: cassandra
@@ -50,3 +56,6 @@ services:
       CASSANDRA_CLUSTER_NAME: CassieCluster
       CASSANDRA_ENDPOINT_SNITCH: GossipingPropertyFileSnitch
       CASSANDRA_DC: datacenter2
+
+# volumes:
+#   reviews-postgres-data:
