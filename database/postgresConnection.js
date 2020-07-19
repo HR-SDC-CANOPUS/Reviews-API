@@ -5,35 +5,149 @@ const client = new Client({
   port: 5432,
   user: 'admin',
   password: 'secret',
-  database: 'reviews'
+  database: 'reviewsData'
 });
 
 client.connect();
 
-client.query('SELECT $1::text as message', ['Hello world!'], (err, res) => {
-  console.log(err ? err.stack : res.rows[0].message) // Hello World!
-  client.end()
-})
-
-// client.query(`CREATE TABLE mike_test_data(
-// 	user_id serial PRIMARY KEY,
-// 	username VARCHAR (50) UNIQUE NOT NULL,
-// 	password VARCHAR (50) NOT NULL,
-// 	email VARCHAR (355) UNIQUE NOT NULL,
-// 	created_on TIMESTAMP NOT NULL,
-// 	last_login TIMESTAMP
-// );`, (err, res) => {
-//   console.log(err ? err.stack : res.rows);
+//! TEST CONNECTION
+// client.query('SELECT $1::text as message', ['Hello world!'], (err, res) => {
+//   console.log(err ? err.stack : res.rows[0].message) // Hello World!
 //   client.end()
 // })
 
-// client.query(`INSERT INTO mike_test_data (user_id, username, password, email) VALUES (1, 'mdoudy', '123', 'test');`, (err, res) => {
-//   console.log(err ? err.stack : res.rows);
-//   client.end()
-// })
+const queries = {
+
+  createSchema: () => {
+    client.query(`CREATE TABLE IF NOT EXISTS reviews (
+      id SERIAL PRIMARY KEY,
+      product_id int,
+      rating int,
+      date timestamp,
+      summary VARCHAR,
+      body VARCHAR,
+      recommend int,
+      reported int,
+      reviewer_name VARCHAR,
+      reviewer_email VARCHAR,
+      response VARCHAR,
+      helpfulness int);`, (err, res) => {
+        console.log(err ? err.stack : res.rows);
+        // client.end()
+      })
+
+    client.query(`CREATE TABLE IF NOT EXISTS photos (
+      id SERIAL PRIMARY KEY,
+      url VARCHAR,
+      review_id int);`, (err, res) => {
+        console.log(err ? err.stack : res.rows);
+        // client.end()
+      })
+
+    client.query(`CREATE TABLE IF NOT EXISTS characteristics (
+      id SERIAL PRIMARY KEY,
+      product_id int,
+      name VARCHAR);`, (err, res) => {
+        console.log(err ? err.stack : res.rows);
+        // client.end()
+      })
+
+    client.query(`CREATE TABLE IF NOT EXISTS characteristics_reviews (
+      id SERIAL PRIMARY KEY,
+      review_id int,
+      characteristics_id int,
+      value int);`, (err, res) => {
+        console.log(err ? err.stack : res.rows);
+        // client.end()
+      })
+  },
+
+  copyCsvToReviews: (path) => {
+
+  },
+
+  copyCsvToPhotos: (path) => {
+    client.query(`COPY photos(id, url, review_id)
+    FROM '${path}' DELIMITER ',' CSV HEADER;`, (err, res) => {
+        console.log(err ? err.stack : res.rows);
+        // client.end()
+      })
+
+  },
+
+  copyCsvToCharacteristics: (path) => {
+
+  },
+
+  copyCsvToCharacteristicsReviews: (path) => {
+
+  },
+
+  insertIntoReviews: (data) => {
+    client.query(`INSERT INTO reviews (
+        id,
+        product_id,
+        rating,
+        date,
+        summary,
+        body,
+        recommend,
+        reported,
+        reviewer_name,
+        reviewer_email,
+        response,
+        helpfulness)
+        VALUES (
+          ${data[0]},
+          ${data[1]},
+          ${data[2]},
+          '${data[3]}',
+          '${data[4]}',
+          '${data[5]}',
+          '${data[6]}',
+          ${data[7]},
+          '${data[8]}',
+          '${data[9]}',
+          '${data[10]}',
+          ${data[11]}
+        );`, (err, res) => {
+        console.log(err ? err.stack : res.rows);
+        // client.end()
+      })
+  }
 
 
-// client.query(`SELECT * FROM mike_test_data;`, (err, res) => {
-//   console.log(err ? err.stack : res.rows);
-//   client.end()
-// })
+
+      // client.query(`INSERT INTO reviews (
+      //   id,
+      //   product_id,
+      //   rating,
+      //   date,
+      //   summary,
+      //   body,
+      //   recommend,
+      //   reported,
+      //   reviewer_name,
+      //   reviewer_email,
+      //   response,
+      //   helpfulness)
+      //   VALUES (
+      //     80091,
+      //     13806,
+      //     3,
+      //     '2019-05-27T00:00:00.000Z',
+      //     'Aut dolorem',
+      //     'Id dicta',
+      //     1,
+      //     0,
+      //     'Korey96',
+      //     'Rusty_Corkery@yahoo.com',
+      //     ${null},
+      //     19);`, (err, res) => {
+      //   console.log(err ? err.stack : res.rows);
+      //   client.end()
+      // })
+
+    }
+
+module.exports = queries;
