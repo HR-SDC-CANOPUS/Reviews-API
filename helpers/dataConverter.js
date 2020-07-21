@@ -81,17 +81,17 @@ fsReadStream
     while(row = this.read()){
 
       //! WRITE TO CSV
-      // let records = [formatter(row)];
-      // csvWriter.writeRecords(records)
-      //   .then(() => {
-      //       i += 1;
-      //       console.log(`CSV Records Written: ${i}`);
-      //   });
+      let records = [formatter(row)];
+      csvWriter.writeRecords(records)
+        .then(() => {
+            i += 1;
+            console.log(`CSV Records Written: ${i}`);
+        });
 
       //! INSERT INDIVIDUAL
-      queries.insertIntoReviews(row);
-      i += 1;
-      console.log('Parsed: ', i * batchSize, ' - ', ((i * batchSize) * 100 / 6000000).toPrecision(3), '%');
+      // queries.insertIntoReviews(row);
+      // i += 1;
+      // console.log('Parsed: ', i * batchSize, ' - ', ((i * batchSize) * 100 / 6000000).toPrecision(3), '%');
 
       //! INSERT BATCHES
       // batchArray.push(row);
