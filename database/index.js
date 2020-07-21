@@ -150,4 +150,4 @@ const queries = {
 
     }
 
-module.exports = queries;
+module.exports = client;

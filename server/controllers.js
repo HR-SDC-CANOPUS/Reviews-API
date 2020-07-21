@@ -8,7 +8,14 @@ module.exports = {
     const count = req.query.count || 5;
     const sort = req.query.sort || 'newest';
 
-    res.send({productId, page, count, sort});
+    models.dbGetReviews({ productId, page, count, sort })
+    .then((data) => {
+      res.send(data.rows);
+    })
+    .catch((err) => {
+      console.log('DB ERROR: ', err);
+      res.sendStatus(404);
+    })
   },
 
   getReviewMetadata: (req, res) => {
@@ -17,9 +24,17 @@ module.exports = {
   },
 
   addReview: (req, res) => {
-    const productId = req.params.product_id;
-    const data = req.body;
+    const params = { ...req.body, productId: req.params.product_id };
 
+    models.dbAddReview(params)
+    .then((data) => {
+      console.log(data);
+      res.sendStatus(200);
+    })
+    .catch((err) => {
+      console.log('DB ERROR: ', err);
+      res.sendStatus(404);
+    })
   },
 
   markReviewHelpful: (req, res) => {
