@@ -31,7 +31,7 @@ const queries = {
       reviewer_name VARCHAR,
       reviewer_email VARCHAR,
       response VARCHAR,
-      helpfulness int);`, (err, res) => {
+      helpfulness int DEFAULT 0);`, (err, res) => {
         console.log(err ? err.stack : res.rows);
         // client.end()
       })
