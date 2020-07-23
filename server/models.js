@@ -1,27 +1,23 @@
 const getReviews = require('../database/queries/getReviews');
+const getReviewMetadata = require('../database/queries/getReviewMetadata');
 const addPhotos = require('../database/queries/addPhotos');
 const addReview = require('../database/queries/addReview');
-
-const queries = () => {};
+const addCharacteristicsReviews = require('../database/queries/addCharacteristicsReviews');
+const markReviewHelpful = require('../database/queries/markReviewHelpful');
+const markReviewReported = require('../database/queries/markReviewReported');
 
 module.exports = {
   dbGetReviews: (params) => getReviews(params),
-  dbGetReviewMetadata: () => queries,
+  dbGetReviewMetadata: (productId) => getReviewMetadata(productId),
   dbAddReview: (params) => {
-
     return addReview(params)
     .then(({rows}) => {
       const reviewId = rows[0].id;
-
-      // add photos
-      // addPhotos({ photos: params.photos, reviewId });
-
-      // add characteristics
-      // return addCharacteristics()
-
+      addPhotos({ photos: params.photos, reviewId });
+      addCharacteristicsReviews({ characteristics: params.characteristics, reviewId });
     });
 
   },
-  dbMarkReviewHelpful: () => queries,
-  dbMarkReviewReported: () => queries
+  dbMarkReviewHelpful: (reviewId) => markReviewHelpful(reviewId),
+  dbMarkReviewReported: (reviewId) => markReviewReported(reviewId)
 }

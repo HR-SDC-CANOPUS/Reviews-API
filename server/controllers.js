@@ -10,7 +10,7 @@ module.exports = {
 
     models.dbGetReviews({ productId, page, count, sort })
     .then((data) => {
-      res.send(data.rows);
+      res.send({product: productId, page, count, results: data.rows});
     })
     .catch((err) => {
       console.log('DB ERROR: ', err);
@@ -20,6 +20,15 @@ module.exports = {
 
   getReviewMetadata: (req, res) => {
     const productId = req.params.product_id;
+
+    models.dbGetReviewMetadata(productId)
+    .then((data) => {
+      res.send({product: productId, results: data.rows});
+    })
+    .catch((err) => {
+      console.log('DB ERROR: ', err);
+      res.sendStatus(404);
+    })
 
   },
 
@@ -40,11 +49,27 @@ module.exports = {
   markReviewHelpful: (req, res) => {
     const reviewId = req.params.review_id;
 
+    models.dbMarkReviewHelpful(reviewId)
+    .then((data) => {
+      res.sendStatus(200);
+    })
+    .catch((err) => {
+      console.log('DB ERROR: ', err);
+      res.sendStatus(404);
+    })
   },
 
   markReviewReported: (req, res) => {
     const reviewId = req.params.review_id;
 
+    models.dbMarkReviewReported(reviewId)
+    .then((data) => {
+      res.sendStatus(200);
+    })
+    .catch((err) => {
+      console.log('DB ERROR: ', err);
+      res.sendStatus(404);
+    })
   }
 
 }

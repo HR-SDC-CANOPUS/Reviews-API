@@ -1,40 +1,30 @@
 const client = require('../index');
 
 module.exports = ({ productId, page, count, sort }) => {
-  const query =
-      ` SELECT T1.id, T1.rating, T1.summary, T1.recommend, T1.response, T1.body, T1.date, T1.reviewer_name, T1.helpfulness, (T2.url)
 
-        FROM (SELECT * FROM "reviews" WHERE "product_id" = '${productId}' AND "reported" = 'false') AS T1
-        JOIN (SELECT * FROM "photos") AS T2
-        ON T1.id = T2.review_id
-        ORDER BY "${sort}" DESC
-        LIMIT ${count}
-        OFFSET ${(count * page) - count}
-        ;`
+  if (sort === 'newest') sort = 'order by r2.date desc';
+  if (sort === 'helpful') sort = 'order by r2.helpfulness desc';
+  if (sort === 'relevant') sort = 'order by r2.helpfulness desc, r2.date desc';
 
-  // const query2 = `
-  //   SELECT id, t.tag_array
-  //   FROM reviews r, LATERAL (
-  //     SELECT ARRAY (
-  //       SELECT t.url
-  //       FROM photos p
-  //       JOIN tags t ON t.id = p.review_id
-  //       WHERE p
-  //     ) AS tag_array
-  //   ) t;
-  // `
-        // EXAMPLE
-        // SELECT id, title AS item_title, t.tag_array
-        // FROM   items i, LATERAL (  -- this is an implicit CROSS JOIN
-        //   SELECT ARRAY (
-        //       SELECT t.title
-        //       FROM   items_tags it
-        //       JOIN   tags       t  ON t.id = it.tag_id
-        //       WHERE  it.item_id = i.id
-        //       ) AS tag_array
-        //   ) t;
-
-    //  return Promise.resolve(query);
+  const query = `
+        select r2.id as review_id, r2.rating, r2.summary, r2.recommend, r2.response, r2.body, r2.date, r2.reviewer_name, r2.helpfulness,
+          (
+          select array_to_json(coalesce(array_agg(photo), array[]::record[]))
+          from
+            (
+            select p.id, p.url
+            from reviews r
+            inner join photos p
+            on r.id = p.review_id
+            where p.review_id = r2.id
+            ) photo
+          ) as photos
+        from reviews r2
+        where r2.product_id = ${productId} and r2.reported <> true
+        ${sort}
+        limit ${count}
+        offset ${count * page - count}
+        ;`;
 
   return client.query(query);
-}
+};
