@@ -30,8 +30,6 @@ const csvWriter = createCsvWriter({
   ]
 });
 
-// id,product_id,rating,date,summary,body,recommend,reported,reviewer_name,reviewer_email,response,helpfulness
-
 const cleaner = (data) => {
   if (isNaN(data[0]) || !data[0] || isNaN(data[1]) || !data[1]) {
     return;
