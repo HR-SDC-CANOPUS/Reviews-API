@@ -29,36 +29,5 @@ services:
     ports:
       - 8080:8080
 
-  # cassie1:
-  #   image: cassandra
-  #   restart: always
-  #   volumes:
-  #     - reviews-cassandra-data:/var/lib/cassandra/data
-  #   environment:
-  #     CASSANDRA_CLUSTER_NAME: CassieCluster
-  #     CASSANDRA_ENDPOINT_SNITCH: GossipingPropertyFileSnitch
-  #     CASSANDRA_DC: datacenter1
-  #   ports:
-  #     - '9042:9042'
-
-  # cassie2:
-  #   image: cassandra
-  #   restart: always
-  #   environment:
-  #     CASSANDRA_SEEDS: cassie1
-  #     CASSANDRA_CLUSTER_NAME: CassieCluster
-  #     CASSANDRA_ENDPOINT_SNITCH: GossipingPropertyFileSnitch
-  #     CASSANDRA_DC: datacenter1
-
-  # cassie3:
-  #   image: cassandra
-  #   restart: always
-  #   environment:
-  #     CASSANDRA_SEEDS: cassie1
-  #     CASSANDRA_CLUSTER_NAME: CassieCluster
-  #     CASSANDRA_ENDPOINT_SNITCH: GossipingPropertyFileSnitch
-  #     CASSANDRA_DC: datacenter2
-
 volumes:
   reviews-postgres-data:
-  # reviews-cassandra-data:
