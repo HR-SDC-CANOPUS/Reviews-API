@@ -1,16 +1,12 @@
 const client = require('../index');
 
-module.exports = ({ photos }) => {
+module.exports = ({ photos, reviewId }) => {
   const query =
-      ` SELECT T1.id, T1.rating, T1.summary, T1.recommend, T1.response, T1.body, T1.date, T1.reviewer_name, T1.helpfulness, (T2.url)
+      ` INSERT INTO photos (url, review_id)
+        SELECT url, review_id FROM UNNEST ($1::text[], $2::int[]) AS t (url, review_id)`;
 
-        FROM (SELECT * FROM "reviews" WHERE "product_id" = '${productId}' AND "reported" = 'false') AS T1
-        JOIN (SELECT * FROM "photos") AS T2
-        ON T1.id = T2.review_id
-        ORDER BY "${sort}" DESC
-        LIMIT ${count}
-        OFFSET ${(count * page) - count}
-        ;`
-
-  return client.query(query);
+  return client.query(query, [ photos, Array(photos.length).fill(reviewId) ])
+    .catch((err) => {
+      console.log('DB INSERT ERROR: ', err);
+    });
 }
