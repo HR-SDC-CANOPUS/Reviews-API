@@ -1,7 +1,6 @@
-const client = require('../index');
+const pool = require('../index');
 
 module.exports = ({ productId, page, count, sort }) => {
-
   if (sort === 'newest') sort = 'order by r2.date desc';
   if (sort === 'helpful') sort = 'order by r2.helpfulness desc';
   if (sort === 'relevant') sort = 'order by r2.helpfulness desc, r2.date desc';
@@ -26,5 +25,16 @@ module.exports = ({ productId, page, count, sort }) => {
         offset ${count * page - count}
         ;`;
 
-  return client.query(query);
+  return pool.connect().then((client) => {
+    return client
+      .query(query)
+      .then((res) => {
+        client.release();
+        return res;
+      })
+      .catch((err) => {
+        client.release();
+        return err;
+      });
+  });
 };
