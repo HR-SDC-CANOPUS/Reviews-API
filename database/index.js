@@ -50,6 +50,11 @@ const queries = {
       value int);`, (err, res) => {
         console.log(err ? err.stack : res.rows);
       })
+
+    // CREATE INDEX idx_pId ON reviews(product_id);
+    // CREATE INDEX idx_rId ON photos(review_id);
+    // CREATE INDEX idx_cpId ON characteristics(product_id);
+    // CREATE INDEX idx_crcId ON characteristics_reviews(characteristics_id);
   }
 
     }
