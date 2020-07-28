@@ -1,4 +1,4 @@
-const client = require('../index');
+const pool = require('../index');
 
 module.exports = (productId) => {
   const query = `
@@ -70,5 +70,16 @@ module.exports = (productId) => {
     return data;
   };
 
-  return client.query(query).then((data) => metadataTransformer(data));
+  return pool.connect().then((client) => {
+    return client
+      .query(query)
+      .then((res) => {
+        client.release();
+        return metadataTransformer(res);
+      })
+      .catch((err) => {
+        client.release();
+        return err;
+      });
+  });
 };

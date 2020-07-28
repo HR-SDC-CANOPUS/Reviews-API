@@ -1,10 +1,20 @@
-const client = require('../index');
+const pool = require('../index');
 
 module.exports = (reviewId) => {
-  const query =
-      ` UPDATE "reviews"
+  const query = ` UPDATE "reviews"
         SET "helpfulness" = "helpfulness" + 1
-        WHERE id = ${reviewId};`
+        WHERE id = ${reviewId};`;
 
-  return client.query(query);
-}
+  return pool.connect().then((client) => {
+    return client
+      .query(query)
+      .then((res) => {
+        client.release();
+        return res;
+      })
+      .catch((err) => {
+        client.release();
+        return err;
+      });
+  });
+};
