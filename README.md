@@ -62,16 +62,12 @@ Open `http://localhost:3000`
 
 >GET -- /reviews/%{*:1-100000}/meta
 
-<br>
-
 #### *Results*
 | Optimization Type      | Avg. Response Time  | Successful Response Counts |
 |------------------------|--------------------:|---------------------------:|
 | Indexing               |             8587 ms |              11920 / 60000 |
 | Indexing, Redis        |     5419 ms (36.9%) |               18512 / 60000 |
 | Indexing, Redis, Pools |     3287 ms (61.8%) |               29441 / 60000 |
-
-<br>
 
 #### *Detailed Loader.io results:*
 
@@ -100,7 +96,7 @@ Open `http://localhost:3000`
 
 </details>
 
-<br>
+---
 
 ### Test Group 2 - Requests on repeating IDs
 #### *Scenario*
@@ -114,16 +110,12 @@ Open `http://localhost:3000`
 
 >GET /reviews/%{*:100000-100010}/meta
 
-<br>
-
 #### *Results*
 | Optimization Type      | Avg. Response Time  | Successful Response Counts |
 |------------------------|--------------------:|---------------------------:|
 | Indexing               |             4219 ms |              23962 / 60000 |
 | Indexing, Redis        |      304 ms (92.8%) |               60000 / 60000 |
 | Indexing, Redis, Pools |      119 ms (97.2%) |               60000 / 60000 |
-
-<br>
 
 #### *Detailed Loader.io results:*
 
@@ -151,5 +143,3 @@ Open `http://localhost:3000`
 ![](readme-assets/SDC-Repeating-3.png)
 
 </details>
-
-<br>
