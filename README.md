@@ -1,5 +1,5 @@
 # Greenfield Reviews API Service
-The goal of this project was to build a scalable RESTful API service for a retail web-portal and optimize to handle web-scale traffic. An ETL process was implemented to migrate legacy datasets of more than 20M+ records into a Postgres database. The service was incrementally optimized through database indexing, connection pooling, and Redis caching to handle a throughput of 60k client requests in 30 sec (2k per sec) with an average response time of 119ms (97.2% increase in avg. response time compared to just indexing). The server and Postgres database was containerized using Docker and deployed on 2 seperate AWS EC2 intances.
+The goal of this project was to build a scalable RESTful API service for a retail web-portal and optimize to handle web-scale traffic. An ETL process was implemented to migrate legacy datasets of more than 20M+ records into a Postgres database. The service was incrementally optimized through database indexing, connection pooling, and Redis caching to handle a throughput of 60k client requests in 30 sec (2k per sec) with an average response time of 119ms (97.2% increase in avg. response time compared to just indexing). The server and Postgres database was containerized using Docker and deployed on 2 separate AWS EC2 instances.
 
 ---
 
